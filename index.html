@@ -64,21 +64,7 @@ d3.csv("data/some_courses.csv", function(error, courses) {
 
   console.log(courses);
 
-  // Add grey background lines for context.
-  background = svg.append("g")
-      .attr("class", "background")
-    .selectAll("path")
-      .data(courses)
-    .enter().append("path")
-      .attr("d", path);
 
-  // Add blue foreground lines for focus.
-  foreground = svg.append("g")
-      .attr("class", "foreground")
-    .selectAll("path")
-      .data(courses)
-    .enter().append("path")
-      .attr("d", path);
 
   // Add a group element for each dimension.
   var g = svg.selectAll(".dimension")
@@ -96,24 +82,21 @@ d3.csv("data/some_courses.csv", function(error, courses) {
       .attr("y", -9)
       .text(function(d) { return d; });
 
-  // // Add and store a brush for each axis.
-  g.append("g")
-      .attr("class", "brush")
-      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
-    .selectAll("rect")
-      .attr("x", -8)
-      .attr("width", 16);
+  // Add grey background lines for context.
+  background = svg.append("g")
+      .attr("class", "background")
+    .selectAll("path")
+      .data(courses)
+    .enter().append("path")
+      .attr("d", path);
 
-
-  // var parcoords = d3.parcoords()("#reviews-graph")
-  //   .data([
-  //     [3.7,3.8,3.7,3.6],
-  //     [3.4,3.5,3.3,3],
-  //     [4.7,4.8,4,4.9],
-  //   ])
-  //   .render()
-  //   .createAxes();
-
+  // Add blue foreground lines for focus.
+  foreground = svg.append("g")
+      .attr("class", "foreground")
+    .selectAll("path")
+      .data(courses)
+    .enter().append("path")
+      .attr("d", path);
 
 });
 
