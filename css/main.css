@@ -52,3 +52,6 @@ svg {
 	color: #fff;
 	background-color: rgb(214, 39, 40);
 }
+.labels {
+  font-weight:bold;
+}

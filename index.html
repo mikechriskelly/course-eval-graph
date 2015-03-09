@@ -71,7 +71,7 @@ var svg = d3.select(".graph").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("data/some_courses.csv", function(error, courses) {
+d3.csv("data/all_courses.csv", function(error, courses) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(courses[0]).filter(function(d) {
@@ -149,6 +149,7 @@ d3.csv("data/some_courses.csv", function(error, courses) {
       })
     .append("text")
       .style("text-anchor", "middle")
+      .attr('class','labels')
       .attr("y", -5)
       .attr("transform", function(d) {
          return "rotate(-45)" 
