@@ -51,7 +51,7 @@
   </body>
   <script>
 
-var margin = {top: 30, right: 10, bottom: 10, left: 10},
+var margin = {top: 100, right: 50, bottom: 10, left: 10},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -84,12 +84,9 @@ d3.csv("data/all_courses.csv", function(error, courses) {
 
   console.log(courses);
 
-
   var select1 = d3.select("#class-1");
   var select2 = d3.select("#class-2");
   var select3 = d3.select("#class-3");
-
-  console.log(c10(3));
 
   select1
     .on("change", function(d) {
@@ -130,6 +127,11 @@ d3.csv("data/all_courses.csv", function(error, courses) {
       .attr("value", function (d, i) { return i; })
       .text(function (d) { return d.crsabbr + ' ' + d.crsno + ' ' + d.lname; });
 
+  var tooltip = d3.select("body")
+    .append("div")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden");
 
   // Add a group element for each dimension.
   var g = svg.selectAll(".dimension")
@@ -148,38 +150,42 @@ d3.csv("data/all_courses.csv", function(error, courses) {
         }
       })
     .append("text")
-      .style("text-anchor", "middle")
+      .style("text-anchor", "left")
       .attr('class','labels')
-      .attr("y", -5)
+      .attr("x", 0)
+      .attr("y", -4)
       .attr("transform", function(d) {
          return "rotate(-45)" 
       })
       .text(function(d) { 
         desc = '';
         switch(d) {
-          case 'q2':
+          case 'q1':
               desc = 'whole';
               break;
-          case 'q3':
+          case 'q2':
               desc = 'content';
               break;
-          case 'q4':
+          case 'q3':
               desc = 'contribution';
               break;
-          case 'q5':
+          case 'q4':
               desc = 'effectiveness';
               break;
-          case 'q6':
+          case 'q5':
               desc = 'organization';
               break;
-          case 'q7':
+          case 'q6':
               desc = 'voice';
               break;
-          case 'q8':
+          case 'q7':
               desc = 'explanations';
               break;
-          case 'q9':
+          case 'q8':
               desc = 'alt. explanations';
+              break;
+          case 'q9':
+              desc = 'examples';
               break;
           case 'q10':
               desc = 'question quality';
@@ -252,7 +258,17 @@ d3.csv("data/all_courses.csv", function(error, courses) {
         .data(classes)
       .enter().append("path")
         .attr("d", path)
-        .style("stroke", function(d, i) { return c10(i); });
+        .style("stroke", function(d, i) { return c10(i); })
+        .on("mouseover", function(d){
+          return tooltip
+            .style("visibility", "visible")
+            .text(d.crsabbr + ' ' + d.crsno + ' ' + d.lname);
+          })
+        .on("mousemove", function(){
+          return tooltip
+            .style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+          })
+        .on("mouseout", function(){return tooltip.style("visibility", "hidden");});;
   }
 
 });

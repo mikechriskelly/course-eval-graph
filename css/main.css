@@ -20,6 +20,7 @@ svg {
 
 .foreground path {
   fill: none;
+  stroke-width: 2;
   /*stroke: steelblue;*/
 }
 
@@ -31,7 +32,7 @@ svg {
 
 .axis line,
 .axis path {
-  fill: #ccc;
+  fill: #cfcfcf;
   stroke: none;
   shape-rendering: crispEdges;
 }
@@ -53,5 +54,7 @@ svg {
 	background-color: rgb(214, 39, 40);
 }
 .labels {
-  font-weight:bold;
+  font-size: 12px;
+  color: #666;
+  /*font-weight:bold;*/
 }
