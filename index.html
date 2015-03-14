@@ -14,7 +14,6 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="js/d3.parcoords.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -59,19 +58,19 @@ var x = d3.scale.ordinal().rangePoints([0, width], 1),
     y = {};
 
 var line = d3.svg.line(),
-    axis = d3.svg.axis().orient("left"),
+    axis = d3.svg.axis().orient('left'),
     background,
     foreground;
 
 var c10 = d3.scale.category10();
 
-var svg = d3.select(".graph").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var svg = d3.select('.graph').append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+  .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-d3.csv("data/all_courses.csv", function(error, courses) {
+d3.csv('data/all_courses.csv', function(error, courses) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(courses[0]).filter(function(d) {
@@ -84,78 +83,78 @@ d3.csv("data/all_courses.csv", function(error, courses) {
 
   console.log(courses);
 
-  var select1 = d3.select("#class-1");
-  var select2 = d3.select("#class-2");
-  var select3 = d3.select("#class-3");
+  var select1 = d3.select('#class-1');
+  var select2 = d3.select('#class-2');
+  var select3 = d3.select('#class-3');
 
   select1
-    .on("change", function(d) {
-      var value = d3.select(this).property("value");
+    .on('change', function(d) {
+      var value = d3.select(this).property('value');
       updateLine();
     });
 
-  select1.selectAll("option")
+  select1.selectAll('option')
     .data(courses)
     .enter()
-      .append("option")
-      .attr("value", function (d, i) { return i; })
+      .append('option')
+      .attr('value', function (d, i) { return i; })
       .text(function (d) { return d.crsabbr + ' ' + d.crsno + ' ' + d.lname; });
 
   select2
-    .on("change", function(d) {
-      var value = d3.select(this).property("value");
+    .on('change', function(d) {
+      var value = d3.select(this).property('value');
       updateLine();
     });
 
-  select2.selectAll("option")
+  select2.selectAll('option')
     .data(courses)
     .enter()
-      .append("option")
-      .attr("value", function (d, i) { return i; })
+      .append('option')
+      .attr('value', function (d, i) { return i; })
       .text(function (d) { return d.crsabbr + ' ' + d.crsno + ' ' + d.lname; });
 
   select3
-    .on("change", function(d) {
-      var value = d3.select(this).property("value");
+    .on('change', function(d) {
+      var value = d3.select(this).property('value');
       updateLine();
     });
 
-  select3.selectAll("option")
+  select3.selectAll('option')
     .data(courses)
     .enter()
-      .append("option")
-      .attr("value", function (d, i) { return i; })
+      .append('option')
+      .attr('value', function (d, i) { return i; })
       .text(function (d) { return d.crsabbr + ' ' + d.crsno + ' ' + d.lname; });
 
-  var tooltip = d3.select("body")
-    .append("div")
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("visibility", "hidden");
+  var tooltip = d3.select('body')
+    .append('div')
+    .style('position', 'absolute')
+    .style('z-index', '10')
+    .style('visibility', 'hidden');
 
   // Add a group element for each dimension.
-  var g = svg.selectAll(".dimension")
+  var g = svg.selectAll('.dimension')
       .data(dimensions)
-    .enter().append("g")
-      .attr("class", "dimension")
-      .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
+    .enter().append('g')
+      .attr('class', 'dimension')
+      .attr('transform', function(d) { return 'translate(' + x(d) + ')'; });
 
   // Add an axis and title.
-  g.append("g")
-      .attr("class", "axis")
+  g.append('g')
+      .attr('class', 'axis')
       .each(function(d) { 
         d3.select(this).call(axis.scale(y[d]));
         if(d != 'q1') {
           d3.select(this).call(axis.ticks(0)); 
         }
       })
-    .append("text")
-      .style("text-anchor", "left")
+    .append('text')
+      .style('text-anchor', 'left')
       .attr('class','labels')
-      .attr("x", 0)
-      .attr("y", -4)
-      .attr("transform", function(d) {
-         return "rotate(-45)" 
+      .attr('x', 0)
+      .attr('y', -4)
+      .attr('transform', function(d) {
+         return 'rotate(-45)'; 
       })
       .text(function(d) { 
         desc = '';
@@ -226,49 +225,42 @@ d3.csv("data/all_courses.csv", function(error, courses) {
           case 'q22':
               desc = 'clarity';
               break;
-        };
-
+        }
         return desc; 
       });
 
   function updateLine() {
-    var sel1 = +d3.select("#class-1").node().value;
-    var sel2 = +d3.select("#class-2").node().value;
-    var sel3 = +d3.select("#class-3").node().value;
+    var sel1 = +d3.select('#class-1').node().value;
+    var sel2 = +d3.select('#class-2').node().value;
+    var sel3 = +d3.select('#class-3').node().value;
     classes = [];
     if (sel1 > -1) classes.push(courses[sel1]);
     if (sel2 > -1) classes.push(courses[sel2]);
     if (sel3 > -1) classes.push(courses[sel3]);
 
     console.log(classes);
-    // Add grey background lines for context.
-    // background = svg.append("g")
-    //     .attr("class", "background")
-    //   .selectAll("path")
-    //     .data(classes)
-    //   .enter().append("path")
-    //     .attr("d", path);
 
-    svg.selectAll(".foreground").remove();
+    svg.selectAll('.foreground').remove();
 
     // Add blue foreground lines for focus.
-    svg.append("g")
-        .attr("class", "foreground")
-      .selectAll("path")
+    svg.append('g')
+        .attr('class', 'foreground')
+      .selectAll('path')
         .data(classes)
-      .enter().append("path")
-        .attr("d", path)
-        .style("stroke", function(d, i) { return c10(i); })
-        .on("mouseover", function(d){
+      .enter().append('path')
+        .attr('d', path)
+        .style('stroke', function(d, i) { return c10(i); })
+        .on('mouseover', function(d){
           return tooltip
-            .style("visibility", "visible")
+            .style('visibility', 'visible')
             .text(d.crsabbr + ' ' + d.crsno + ' ' + d.lname);
           })
-        .on("mousemove", function(){
+        .on('mousemove', function(){
           return tooltip
-            .style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+            .style('top', (event.pageY-10)+'px').style('left',(event.pageX+10)+'px');
           })
-        .on("mouseout", function(){return tooltip.style("visibility", "hidden");});;
+        .on('mouseout', function(){return tooltip.style('visibility', 'hidden');
+      });
   }
 
 });
