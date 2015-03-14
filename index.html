@@ -12,6 +12,7 @@
 
     <!-- JavaScript for D3 and Bootstrap -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
   </head>
@@ -50,6 +51,7 @@
   </body>
   <script>
 
+// Variables for visualization
 var margin = {top: 100, right: 50, bottom: 10, left: 10},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -70,27 +72,36 @@ var svg = d3.select('.graph').append('svg')
   .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-d3.csv('data/all_courses.csv', function(error, courses) {
+var select1 = d3.select('#class-1');
+var select2 = d3.select('#class-2');
+var select3 = d3.select('#class-3');
 
+// Load the data files
+queue()
+  .defer(d3.csv, 'data/some_courses.csv')
+  .defer(d3.json, 'data/eval_questions.json')
+  .await(ready);
+
+// Main sequence
+function ready(error, courses, eval_questions) {
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(courses[0]).filter(function(d) {
+    // Exclude these features from the graph
     nonfeatures = ['crsabbr','crsno','fname','lname','formtype', 
                    'q23','q24','q25','q26','q27','q28','q29','q30','q31','q32'];
-    return nonfeatures.indexOf(d) < 0 && (y[d] = d3.scale.linear()
+    return nonfeatures.indexOf(d) < 0 && 
+      (y[d] = d3.scale.linear()
         .domain([0,5])
         .range([height, 0]));
   }));
 
   console.log(courses);
-
-  var select1 = d3.select('#class-1');
-  var select2 = d3.select('#class-2');
-  var select3 = d3.select('#class-3');
+  console.log(eval_questions);
 
   select1
     .on('change', function(d) {
       var value = d3.select(this).property('value');
-      updateLine();
+      updateLine(courses);
     });
 
   select1.selectAll('option')
@@ -103,7 +114,7 @@ d3.csv('data/all_courses.csv', function(error, courses) {
   select2
     .on('change', function(d) {
       var value = d3.select(this).property('value');
-      updateLine();
+      updateLine(courses);
     });
 
   select2.selectAll('option')
@@ -116,7 +127,7 @@ d3.csv('data/all_courses.csv', function(error, courses) {
   select3
     .on('change', function(d) {
       var value = d3.select(this).property('value');
-      updateLine();
+      updateLine(courses);
     });
 
   select3.selectAll('option')
@@ -156,114 +167,44 @@ d3.csv('data/all_courses.csv', function(error, courses) {
       .attr('transform', function(d) {
          return 'rotate(-45)'; 
       })
-      .text(function(d) { 
-        desc = '';
-        switch(d) {
-          case 'q1':
-              desc = 'whole';
-              break;
-          case 'q2':
-              desc = 'content';
-              break;
-          case 'q3':
-              desc = 'contribution';
-              break;
-          case 'q4':
-              desc = 'effectiveness';
-              break;
-          case 'q5':
-              desc = 'organization';
-              break;
-          case 'q6':
-              desc = 'voice';
-              break;
-          case 'q7':
-              desc = 'explanations';
-              break;
-          case 'q8':
-              desc = 'alt. explanations';
-              break;
-          case 'q9':
-              desc = 'examples';
-              break;
-          case 'q10':
-              desc = 'question quality';
-              break;
-          case 'q11':
-              desc = 'knowledge';
-              break;
-          case 'q12':
-              desc = 'enthusiasm';
-              break;
-          case 'q13':
-              desc = 'encouragement';
-              break;
-          case 'q14':
-              desc = 'answers';
-              break;
-          case 'q15':
-              desc = 'extra help';
-              break;
-          case 'q16':
-              desc = 'class time';
-              break;
-          case 'q17':
-              desc = 'interest';
-              break;
-          case 'q18':
-              desc = 'learned';
-              break;
-          case 'q19':
-              desc = 'usefulness';
-              break;
-          case 'q20':
-              desc = 'grading';
-              break;
-          case 'q21':
-              desc = 'reasonable work';
-              break;
-          case 'q22':
-              desc = 'clarity';
-              break;
-        }
-        return desc; 
+      .text(function(d, i) {
+        return eval_questions[i].tag; 
       });
+}
 
-  function updateLine() {
-    var sel1 = +d3.select('#class-1').node().value;
-    var sel2 = +d3.select('#class-2').node().value;
-    var sel3 = +d3.select('#class-3').node().value;
-    classes = [];
-    if (sel1 > -1) classes.push(courses[sel1]);
-    if (sel2 > -1) classes.push(courses[sel2]);
-    if (sel3 > -1) classes.push(courses[sel3]);
+function updateLine(courses) {
+  var sel1 = +d3.select('#class-1').node().value;
+  var sel2 = +d3.select('#class-2').node().value;
+  var sel3 = +d3.select('#class-3').node().value;
+  classes = [];
+  if (sel1 > -1) classes.push(courses[sel1]);
+  if (sel2 > -1) classes.push(courses[sel2]);
+  if (sel3 > -1) classes.push(courses[sel3]);
 
-    console.log(classes);
+  console.log(classes);
 
-    svg.selectAll('.foreground').remove();
+  svg.selectAll('.foreground').remove();
 
-    // Add blue foreground lines for focus.
-    svg.append('g')
-        .attr('class', 'foreground')
-      .selectAll('path')
-        .data(classes)
-      .enter().append('path')
-        .attr('d', path)
-        .style('stroke', function(d, i) { return c10(i); })
-        .on('mouseover', function(d){
-          return tooltip
-            .style('visibility', 'visible')
-            .text(d.crsabbr + ' ' + d.crsno + ' ' + d.lname);
-          })
-        .on('mousemove', function(){
-          return tooltip
-            .style('top', (event.pageY-10)+'px').style('left',(event.pageX+10)+'px');
-          })
-        .on('mouseout', function(){return tooltip.style('visibility', 'hidden');
-      });
-  }
-
-});
+  // Add blue foreground lines for focus.
+  svg.append('g')
+      .attr('class', 'foreground')
+    .selectAll('path')
+      .data(classes)
+    .enter().append('path')
+      .attr('d', path)
+      .style('stroke', function(d, i) { return c10(i); })
+      .on('mouseover', function(d){
+        return tooltip
+          .style('visibility', 'visible')
+          .text(d.crsabbr + ' ' + d.crsno + ' ' + d.lname);
+        })
+      .on('mousemove', function(){
+        return tooltip
+          .style('top', (event.pageY-10)+'px').style('left',(event.pageX+10)+'px');
+        })
+      .on('mouseout', function(){return tooltip.style('visibility', 'hidden');
+    });
+}
 
 // Returns the path for a given data point.
 function path(d) {

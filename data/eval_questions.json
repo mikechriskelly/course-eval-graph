@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1,
+    "tag": "whole",
+    "desc": ""
+  },
+  {
+    "id": 2,
+    "tag": "content",
+    "desc": ""
+  },
+  {
+    "id": 3,
+    "tag": "contribution",
+    "desc": ""
+  },
+  {
+    "id": 4,
+    "tag": "effectiveness",
+    "desc": ""
+  },
+  {
+    "id": 5,
+    "tag": "organization",
+    "desc": ""
+  },
+  {
+    "id": 6,
+    "tag": "voice",
+    "desc": ""
+  },
+  {
+    "id": 7,
+    "tag": "explanations",
+    "desc": ""
+  },
+  {
+    "id": 8,
+    "tag": "alt. explanations",
+    "desc": ""
+  },
+  {
+    "id": 9,
+    "tag": "examples",
+    "desc": ""
+  },
+  {
+    "id": 10,
+    "tag": "question quality",
+    "desc": ""
+  },
+  {
+    "id": 11,
+    "tag": "knowledge",
+    "desc": ""
+  },
+  {
+    "id": 12,
+    "tag": "enthusiasm",
+    "desc": ""
+  },
+  {
+    "id": 13,
+    "tag": "encouragement",
+    "desc": ""
+  },
+  {
+    "id": 14,
+    "tag": "answers",
+    "desc": ""
+  },
+  {
+    "id": 15,
+    "tag": "extra help",
+    "desc": ""
+  },
+  {
+    "id": 16,
+    "tag": "class time",
+    "desc": ""
+  },
+  {
+    "id": 17,
+    "tag": "interest",
+    "desc": ""
+  },
+  {
+    "id": 18,
+    "tag": "learned",
+    "desc": ""
+  },
+  {
+    "id": 19,
+    "tag": "usefulness",
+    "desc": ""
+  },
+  {
+    "id": 20,
+    "tag": "grading",
+    "desc": ""
+  },
+  {
+    "id": 21,
+    "tag": "reasonable work",
+    "desc": ""
+  },
+  {
+    "id": 22,
+    "tag": "clarity",
+    "desc": ""
+  }
+]
