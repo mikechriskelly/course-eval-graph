@@ -15,7 +15,7 @@ svg {
 
 .line path {
   fill: none;
-  stroke-width: 0;
+  stroke-width: 1;
 }
 
 .brush .extent {
@@ -31,6 +31,12 @@ svg {
   stroke-width: 1;
   shape-rendering: crispEdges;
 }
+
+.feature-column path {
+  stroke: #ececec;
+  stroke-width: 12;
+}
+
 .axis text {
   text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
