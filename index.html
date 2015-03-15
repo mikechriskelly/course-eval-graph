@@ -10,11 +10,13 @@
     <!-- Custom Styling -->
     <link rel="stylesheet" href="css/main.css">
 
-    <!-- JavaScript for D3 and Bootstrap -->
+    <!-- Load JavaScript libraries -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
+    <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
   </head>
   <body>
     <nav class="navbar navbar-default">
@@ -30,9 +32,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-md-offset-1">
-          <select class="form-control class-1">
-            <option value='-1'>Choose a course</option>
-          </select>
+          <input class="typeahead form-control class-1" type="text" placeholder="Enter Course 1">
         </div>
         <div class="col-md-3">
           <select class="form-control class-2">
@@ -123,6 +123,28 @@ function ready(error, courses, eval_questions) {
 
   // console.log(courses);
   // console.log(eval_questions);
+
+  // Typeahead Form settings
+   $('input.class-1').typeahead({
+    hint: true,
+    highlight: true,
+    minLength: 1
+  },
+  {
+    name: 'state',
+    displayKey: 'value',
+    source: substringMatcher(courses)
+    // TODO: write function for source and matcher
+  });
+
+  // Typeahead Selection Action
+  $('input.class-1').on('typeahead:selected typeahead:autocompleted',
+    function(error, selectionNum) {
+      console.log(selectionNum);
+      // TODO: Need selectionNum, the index of the courses array
+      // Then Update that particular line
+      // updateLine(courses, selectionNum);
+    });
 
   // Assign behavior to all dropdown selectors at once
   classSelector[0]
@@ -272,14 +294,35 @@ function points(d) {
   return dimensions.map(function(p) { return [x(p), y[p](d[p])]; });
 }
 
-function position(d) {
-  var v = dragging[d];
-  return v === null ? x(d) : v;
-}
-
-function transition(g) {
-  return g.transition().duration(500);
-}
+// Typeahead string matching functionality
+// This will be replaced by new SOURCE and MATCHER functions
+// Takes object array of courses
+// returns object array of match
+var substringMatcher = function(courses) {
+  // Extract displayable strings from object array 
+  var strs = courses.map(function(obj) { return obj.crsabbr + ' ' + obj.crsno; });
+  return function findMatches(q, cb) {
+    var matches, substrRegex;
+ 
+    // an array that will be populated with substring matches
+    matches = [];
+ 
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+ 
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        // the typeahead jQuery plugin expects suggestions to a
+        // JavaScript object, refer to typeahead docs for more info
+        matches.push({ value: str });
+      }
+    });
+ 
+    cb(matches);
+  };
+};
 
 </script>
 </html>
