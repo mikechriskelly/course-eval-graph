@@ -52,7 +52,7 @@
   <script>
 
 // Graph size and coordinates
-var margin = {top: 100, right: 50, bottom: 10, left: 10},
+var margin = {top: 100, right: 10, bottom: 10, left: 150},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -60,12 +60,12 @@ var x = d3.scale.ordinal().rangePoints([0, width], 1),
     y = {};
 
 var line = d3.svg.line(),
-    axis = d3.svg.axis().orient('left'),
-    background,
-    foreground;
+    axis = d3.svg.axis().orient('left');
 
 // Selected class colors: red, blue, green
 var colors = ['#e41a1c', '#377eb8', '#4daf4a'];
+
+var likertTicks = ['very poor', 'poor', 'fair', 'good', 'very good', 'excellent'];
 
 // Main svg container for graph
 var svg = d3.select('.graph').append('svg')
@@ -137,15 +137,23 @@ function ready(error, courses, eval_questions) {
   g.append('g')
       .attr('class', 'axis')
       .each(function(d) { 
+        that = d3.select(this);
         d3.select(this).call(axis.scale(y[d]));
-        if(d != 'q1') {
-          d3.select(this).call(axis.ticks(0)); 
+        // Label first axis but no others
+        if(d == 'q1') {
+          that.call(axis.ticks(likertTicks.length));
+          that.call(axis.tickFormat(function(d, i) {
+            return likertTicks[i];
+          }));
+        } else {
+          that.call(axis.ticks(likertTicks.length));
+          that.call(axis.tickFormat(''));
         }
       })
     .append('text')
       .style('text-anchor', 'left')
       .attr('class','labels')
-      .attr('x', 0)
+      .attr('x', 5)
       .attr('y', -4)
       .attr('transform', function(d) {
          return 'rotate(-45)'; 
@@ -153,6 +161,11 @@ function ready(error, courses, eval_questions) {
       .text(function(d, i) {
         return eval_questions[i].tag; 
       });
+
+  // Format axis labels for likert ratings
+  svg.selectAll('g.tick text')
+    .attr('class','labels-ratings')
+    .attr('x', -20);
 
   // Add group for each possible selection
   svg.selectAll('g.line')
@@ -216,6 +229,15 @@ function path(d) {
 // Returns an array of coordinates for plotting points 
 function points(d) {
   return dimensions.map(function(p) { return [x(p), y[p](d[p])]; });
+}
+
+function position(d) {
+  var v = dragging[d];
+  return v === null ? x(d) : v;
+}
+
+function transition(g) {
+  return g.transition().duration(500);
 }
 
 </script>

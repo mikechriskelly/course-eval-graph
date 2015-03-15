@@ -1,5 +1,5 @@
 body {
-  font: 10px sans-serif;
+  font: 12px sans-serif;
 }
 
 h4 {
@@ -8,13 +8,14 @@ h4 {
 }
 
 svg {
-  font: 10px sans-serif;
+  font: 12px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   margin-top: 50px;
 }
 
 .line path {
   fill: none;
-  stroke-width: 1;
+  stroke-width: 0;
 }
 
 .brush .extent {
@@ -37,6 +38,10 @@ svg {
 .labels {
   font-size: 12px;
   color: #666;
+}
+
+.labels-ratings {
+  font-weight: 200;
 }
 
 select.form-control {
