@@ -23,13 +23,13 @@
           <a class="navbar-brand">Course Comparison Tool</a>
         </div>
         <div class="collapse navbar-collapse">
-          <p class="navbar-text navbar-right">Ba</p>
+          <p class="navbar-text navbar-right">By Anu, Jill, and Mike</p>
         </div>
       </div>
     </nav>
     <div class="container">
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3 col-md-offset-1">
           <select class="form-control class-1">
             <option value='-1'>Choose a course</option>
           </select>
@@ -45,6 +45,9 @@
           </select>
         </div>
       </div>
+      <div id="optionSort">
+        <input name="updateButton" type="button" value="Sort Features" />
+      </div>
     </div>
     <div class="container graph">
     </div>
@@ -52,7 +55,7 @@
   <script>
 
 // Graph size and coordinates
-var margin = {top: 100, right: 10, bottom: 10, left: 150},
+var margin = {top: 90, right: 10, bottom: 10, left: 150},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -106,7 +109,7 @@ queue()
 // Main sequence
 function ready(error, courses, eval_questions) {
   // Extract the list of dimensions and create a scale for each.
-  x.domain(dimensions = d3.keys(courses[0]).filter(function(d) {
+  var features = d3.keys(courses[0]).filter(function(d) {
     // Exclude these features from the graph
     nonfeatures = ['crsabbr','crsno','fname','lname','formtype', 
                    'q23','q24','q25','q26','q27','q28','q29','q30','q31','q32'];
@@ -114,7 +117,9 @@ function ready(error, courses, eval_questions) {
       (y[d] = d3.scale.linear()
         .domain([0,5])
         .range([height, 0]));
-  }));
+  });
+
+  x.domain(dimensions = features);
 
   // console.log(courses);
   // console.log(eval_questions);
@@ -190,6 +195,9 @@ function ready(error, courses, eval_questions) {
       .data(x.domain())
       .enter().append('circle');
     });
+
+  d3.select('#optionSort')
+    .on('click', function(_) { change(courses[1], features); });
 }
 
 // Called whenever a dropdown class selection changes
@@ -228,6 +236,32 @@ function updateLine(courses, selectionNum) {
     .attr('cy', function (d) { return d[1]; })
     .attr('r', 5); 
 }
+
+// Sort the feature columns by value (Not working yet)
+function change(course, features) {
+    console.log(course);
+    console.log(features);
+    // Copy-on-write since tweens are evaluated after a delay.
+    var x0 = x.domain(features.sort(function(a, b) { return course[b] - course[a]; }))
+      //.map(function(d) { return d; })
+      .copy();
+    console.log(x0);
+    //console.log(features.sort(function(a, b) { return course[b] - course[a]; }));
+    svg.selectAll('.circle')
+      .sort(function(a, b) { return x0(a) - x0(b); })
+      .attr('x', function(d) { return x0(d); });
+
+    var transition = svg.transition().duration(750),
+        delay = function(d, i) { return i * 50; };
+
+    // transition.selectAll('.bar')
+    //     .delay(delay)
+    //     .attr("x", function(d) { return x0(d.letter); });
+
+    transition.selectAll('.feature-column')
+      .call(axis.scale(dimensions))
+      .delay(delay);
+  }
 
 // Returns the path for a given data point.
 function path(d) {

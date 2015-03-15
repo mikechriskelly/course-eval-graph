@@ -65,3 +65,7 @@ select.class-3 {	background-color: #4daf4a; }
 .class-1 circle {  fill: #e41a1c; }
 .class-2 circle {  fill: #377eb8; }
 .class-3 circle {  fill: #4daf4a; }
+
+input.class-1 {   background-color: #e41a1c; }
+input.class-2 {   background-color: #377eb8; }
+input.class-3 { background-color: #4daf4a; }
