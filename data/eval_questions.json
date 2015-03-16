@@ -1,112 +1,112 @@
 [
   {
     "id": 1,
-    "tag": "whole",
-    "desc": ""
+    "tag": "overall",
+    "desc": "Course as a whole"
   },
   {
     "id": 2,
     "tag": "content",
-    "desc": ""
+    "desc": "Course Content"
   },
   {
     "id": 3,
     "tag": "contribution",
-    "desc": ""
+    "desc": "Instructor's contribution to the course"
   },
   {
     "id": 4,
     "tag": "effectiveness",
-    "desc": ""
+    "desc": "Instructor's effectiveness in teaching the subject matter"
   },
   {
     "id": 5,
     "tag": "organization",
-    "desc": ""
+    "desc": "Course Organization"
   },
   {
     "id": 6,
     "tag": "voice",
-    "desc": ""
+    "desc": "Clarity of instructor's voice"
   },
   {
     "id": 7,
     "tag": "explanations",
-    "desc": ""
+    "desc": "Explanations by instructor"
   },
   {
     "id": 8,
-    "tag": "alt. explanations",
-    "desc": ""
+    "tag": "rephrasing",
+    "desc": "Instructor's ability to present alternative explanations when needed"
   },
   {
     "id": 9,
     "tag": "examples",
-    "desc": ""
+    "desc": "Instructor's use of examples and illustrations"
   },
   {
     "id": 10,
     "tag": "question quality",
-    "desc": ""
+    "desc": "Quality of questions or problems raised by instructor"
   },
   {
     "id": 11,
     "tag": "knowledge",
-    "desc": ""
+    "desc": "Student confidence in instructor's knowledge"
   },
   {
     "id": 12,
     "tag": "enthusiasm",
-    "desc": ""
+    "desc": "Instructor's enthusiasm"
   },
   {
     "id": 13,
     "tag": "encouragement",
-    "desc": ""
+    "desc": "Encouragement given to students to express themselves"
   },
   {
     "id": 14,
     "tag": "answers",
-    "desc": ""
+    "desc": "Answers to student questions"
   },
   {
     "id": 15,
     "tag": "extra help",
-    "desc": ""
+    "desc": "Availability of extra help when needed"
   },
   {
     "id": 16,
     "tag": "class time",
-    "desc": ""
+    "desc": "Use of class time"
   },
   {
     "id": 17,
     "tag": "interest",
-    "desc": ""
+    "desc": "Instructor's interest in whether students learned"
   },
   {
     "id": 18,
-    "tag": "learned",
-    "desc": ""
+    "tag": "learning",
+    "desc": "Amount learned in the course"
   },
   {
     "id": 19,
     "tag": "usefulness",
-    "desc": ""
+    "desc": "Relevance and usefulness of course content"
   },
   {
     "id": 20,
     "tag": "grading",
-    "desc": ""
+    "desc": "Evaluative and grading techniques (tests, papers, projects, etc.)"
   },
   {
     "id": 21,
-    "tag": "reasonable work",
-    "desc": ""
+    "tag": "work load",
+    "desc": "Reasonableness of assigned work"
   },
   {
     "id": 22,
     "tag": "clarity",
-    "desc": ""
+    "desc": "Clarity of student responsibilities and requirements"
   }
 ]
