@@ -50,7 +50,7 @@ svg {
   font-weight: 200;
 }
 
-select.form-control {
+select.form-control, input.typeahead {
   color: #fff;
 }
 
