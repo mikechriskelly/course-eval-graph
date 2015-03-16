@@ -16,10 +16,31 @@ h4 {
   margin: 0 auto;
   background-color: #efefef;
 }
+.btn {
+  margin: 0px;
+  padding: 2px 6px;
+  font-size: 10px;
+  border: 2px solid #fff;
+  color: #fff;
+
+}
+.btn:hover {
+  border: 2px solid #333;
+  background-color: inherit;
+}
+
+.btn-0, .btn-0:hover, .btn-0:active { color: #fff; background-color: #666; }
+.btn-1, .btn-1:hover, .btn-1:active { color: #fff; background-color: #e41a1c; }
+.btn-2, .btn-2:hover, .btn-2:active { color: #fff; background-color: #377eb8; }
+.btn-3, .btn-3:hover, .btn-3:active { color: #fff; background-color: #4daf4a; }
+
+.active {
+  border: 2px solid #333;
+}
 
 svg {
   font: 12px;
-  margin-top: 50px;
+  margin-top: 5px;
 }
 
 .line path {
