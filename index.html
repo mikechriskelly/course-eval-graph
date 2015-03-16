@@ -19,35 +19,32 @@
     <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
   </head>
   <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand">Course Comparison Tool</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <p class="navbar-text navbar-right">By Anu, Jill, and Mike</p>
-        </div>
-      </div>
-    </nav>
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3 col-md-offset-1">
-          <input class="typeahead form-control class-1" type="text" placeholder="Enter Course 1">
-        </div>
-        <div class="col-md-3">
-          <select class="form-control class-2">
-          <option value='-1'>Choose a course</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <select class="form-control class-3">
-          <option value='-1'>Choose a course</option>
-          </select>
+    <div class="container-fluid header">
+      <div class="container">
+        <div class="row space">
+          <div class="col-md-3">
+            <h3>UW Course Comparison</h3>
+          </div>
+          <div class="col-md-3">
+            <div class="class-1-box">
+              <input class="typeahead form-control class-1" type="search" placeholder="Enter Course 1">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="class-2-box">
+              <input class="typeahead form-control class-2" type="search" placeholder="Enter Course 2">
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="class-3-box">
+              <input class="typeahead form-control class-3" type="search" placeholder="Enter Course 3">
+            </div>
+          </div>
         </div>
       </div>
-      <div>
-        <label><input type="checkbox" id="optionSort"> Sort Features</label>
-      </div>
+    </div>
+    <div class="space">
+      <label><input type="checkbox" id="optionSort"> Sort Features</label>
     </div>
     <div class="container graph">
     </div>
@@ -93,13 +90,6 @@ var tooltip = d3.select('body')
   .style('z-index', '10')
   .style('visibility', 'hidden');
 
-// Dropdown selectors: Used to grab class selection values
-var classSelector = [];
-classSelector[0] = d3.selectAll('select'); // All dropdown selectors
-classSelector[1] = d3.select('select.class-1'); // Class 1
-classSelector[2] = d3.select('select.class-2'); // Class 2
-classSelector[3] = d3.select('select.class-3'); // Class 3
-
 // Load the data files
 queue()
   .defer(d3.csv, 'data/some_courses.csv')
@@ -131,42 +121,41 @@ function ready(error, courses, eval_questions) {
   }
 
   // Typeahead Form settings
-   $('input.class-1').typeahead({
-    hint: true,
-    highlight: true,
-    minLength: 1
-  },
-  {
-    name: 'class-1',
-    displayKey: 'value',
-    source: substringMatcher(coursesDescriptions)
-  });
+  var typeaheadOptions = {
+      hint: true,
+      highlight: true,
+      minLength: 1
+    };
+  
+  // 3 typeahead forms distinguished by names 1-3
+  $('input.class-1').typeahead(typeaheadOptions,
+    {
+      name: 1,
+      displayKey: 'value',
+      source: substringMatcher(coursesDescriptions)
+    });
+  $('input.class-2').typeahead(typeaheadOptions,
+    {
+      name: 2,
+      displayKey: 'value',
+      source: substringMatcher(coursesDescriptions)
+    });
+  $('input.class-3').typeahead(typeaheadOptions,
+    {
+      name: 3,
+      displayKey: 'value',
+      source: substringMatcher(coursesDescriptions)
+    });
 
-  // Typeahead Selection Action
-  $('input.class-1').on('typeahead:selected typeahead:autocompleted',
-    function(e, classSelection, InputSelector) {
+  // Typeahead event behavior; same for all 3
+  $('input').on('typeahead:selected typeahead:autocompleted',
+    // When the form is selected we get the text and which form it came from
+    function(e, classSelection, inputIndex) {
       // Find the index of the string in the courses array
       var classIndex = coursesDescriptions.indexOf(classSelection.value);
       // Update that particular line
-      console.log(InputSelector);
-      updateLine(courses, 1, classIndex);
+      updateLine(courses, classIndex, inputIndex);
     });
-
-  // Assign behavior to all dropdown selectors at once
-  classSelector[0]
-    .on('change', function(d) {
-      var value = d3.select(this).property('value');
-      // Which class selector changed? 1-3
-      var selectionNum = d3.select(this).attr('class').match(/\d+/)[0];
-      // Update that particular line
-      updateLine(courses, selectionNum);
-    });
-  classSelector[0].selectAll('option')
-    .data(courses)
-    .enter()
-      .append('option')
-      .attr('value', function (d, i) { return i; })
-      .text(function (d) { return d.crsabbr + ' ' + d.crsno + ' ' + d.lname; });
 
   // Insert the yAxis
   svg.append('g')
@@ -210,8 +199,7 @@ function ready(error, courses, eval_questions) {
 
   // Add group for each possible selection
   svg.selectAll('g.line')
-    // Slice off first array item since it is the group of classes
-    .data(classSelector.slice(1))
+    .data([1,2,3])
     .enter().append('g')
       .attr('class', function(d,i) { return 'line class-' + (i+1); })
     // Add an empty path that will be updated later
@@ -229,12 +217,10 @@ function ready(error, courses, eval_questions) {
 }
 
 // Called whenever a dropdown class selection changes
-function updateLine(courses, selectorNum, classIndex) {
-  // Which class was selected by which dropdown selector?
-  classIndex = classIndex || +classSelector[selectorNum].node().value;
-  var newClass = courses[classIndex];
+function updateLine(courses, classIndex, inputIndex) {
 
-  var lineGroup = svg.selectAll('g.class-' + selectorNum);
+  var newClass = courses[classIndex];
+  var lineGroup = svg.selectAll('g.class-' + inputIndex);
 
   // Update the line path
   lineGroup.selectAll('path')
