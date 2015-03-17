@@ -27,17 +27,26 @@
           </div>
           <div class="col-md-3">
             <div class="class-1-box">
-              <input class="typeahead form-control class-1" type="search" placeholder="Enter Course 1">
+            <form>
+              <input required class="typeahead form-control class-1" type="search" placeholder="Enter Course 1">
+              <button class="close-icon" type="reset"></button>
+            </form>
             </div>
           </div>
           <div class="col-md-3">
             <div class="class-2-box">
-              <input class="typeahead form-control class-2" type="search" placeholder="Enter Course 2">
+              <form>
+                <input required class="typeahead form-control class-2" type="search" placeholder="Enter Course 2">
+                <button class="close-icon" type="reset"></button>
+              </form>
             </div>
           </div>
           <div class="col-md-3">
             <div class="class-3-box">
-              <input class="typeahead form-control class-3" type="search" placeholder="Enter Course 3">
+              <form>
+                <input required class="typeahead form-control class-3" type="search" placeholder="Enter Course 3">
+                <button class="close-icon" type="reset"></button>
+              </form>
             </div>
           </div>
         </div>
@@ -59,8 +68,8 @@
   <script>
 
 // Graph size and coordinates
-var margin = {top: 90, right: 30, bottom: 10, left: 150},
-    width = 960 - margin.left - margin.right,
+var margin = {top: 100, right: 50, bottom: 10, left: 100},
+    width = 1140 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal().rangePoints([0, width], 1),
@@ -99,7 +108,7 @@ var tooltip = d3.select('body')
 
 // Load the data files
 queue()
-  .defer(d3.csv, 'data/some_courses.csv')
+  .defer(d3.csv, 'data/all_courses_A.csv')
   .defer(d3.json, 'data/eval_questions.json')
   .await(ready);
 
@@ -363,7 +372,9 @@ var substringMatcher = function(strs) {
     matches = [];
  
     // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
+    // If query is only one character then limit results to start of string
+    // This helps avoid noisy results
+    substrRegex = (q.length === 1) ? new RegExp('^' + q, 'i') : new RegExp(q, 'i');
  
     // iterate through the pool of strings and for any string that
     // contains the substring `q`, add it to the `matches` array

@@ -81,12 +81,12 @@ svg {
 }
 
 select.form-control, input.typeahead {
-  border: 1px solid #fff;
   color: #333;
+  border-radius: 8px;
 }
 
 .twitter-typeahead {
-  display: block !important;
+  width: 90%;
 }
 .class-container {
   max-width: 700px;
@@ -95,14 +95,12 @@ select.form-control, input.typeahead {
 .space { margin: 15px 0;}
 
 .class-1-box, .class-2-box, .class-3-box {
-  border-radius: 4px; x
-  margin: 0 10px;
-  padding: 10px;
+  margin: 0 auto;
 }
 
-.class-1-box { 	background-color: #e41a1c; }
-.class-2-box { 	background-color: #377eb8; }
-.class-3-box {	background-color: #4daf4a; }
+.class-1-box input, .class-1-box input:focus { 	border: 12px solid #e41a1c; }
+.class-2-box input, .class-2-box input:focus { 	border: 12px solid #377eb8; }
+.class-3-box input, .class-3-box input:focus {	border: 12px solid #4daf4a; }
 
 .class-1 path {  stroke: #e41a1c; fill: none; }
 .class-2 path {  stroke: #377eb8; fill: none; }
@@ -113,10 +111,49 @@ select.form-control, input.typeahead {
 .class-3 circle {  fill: #4daf4a; }
 
 
+.typeahead, .close-icon {
+  position: relative;
+  padding: 10px;
+}
+
+.close-icon {
+  border:1px solid transparent;
+  background-color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+}
+.close-icon:after {
+  content: 'x';
+  display: block;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  background-color: #b7b7b7;
+  z-index:1;
+  right: 42px;
+  top: 0;
+  bottom: 2px;
+  margin: auto;
+  padding: 2px;
+  border-radius: 50%;
+  text-align: center;
+  color: white;
+  font-weight: normal;
+  font-size: 12px;
+  box-shadow: 0 0 2px #cecece;
+  cursor: pointer;
+}
+
+.typeahead:invalid ~ .close-icon {
+  display: none;
+}
+
 .tt-input, 
 .tt-hint {
     height: 30px;
-    padding: 8px 12px;
+    padding: 14px;
     line-height: 30px;
     border: 2px solid #ccc;
     border-radius: 8px;
