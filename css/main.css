@@ -130,7 +130,10 @@ select.form-control, input.typeahead {
   position: relative;
   padding: 10px;
 }
-
+.welcome {
+  white-space: nowrap;
+  overflow: visible;
+}
 .close-icon {
   display: inline-block;
   position: absolute;

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Coursector: Class Evaluation Graph</title>
+    <title>Coursector: Course Evaluation Graph</title>
    
     <!-- Bootstrap Styling -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -20,7 +20,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Coursector</h1><h4>Class Evaluation Graph</h4>
+      <h1>Coursector</h1><h4>UW Course Evaluation Graph</h4>
     </div>
     <div class="container-fluid header">
       <div class="container">
@@ -35,6 +35,9 @@
             </div>
           </div>
           <div class="col-md-4">
+            <div class="welcome">
+              <h4>Class ratings by professor. Compare up to 3 classes.</h4>
+            </div>
             <div class="class-2-box">
               <form>
                 <input required class="typeahead form-control class-2" type="search" placeholder="Enter another class">
@@ -175,7 +178,10 @@ function ready(error, courses, eval_questions) {
       var closeIcon = '.class-' + inputIndex + '-box .close-icon';
       $(closeIcon).css('display','inline-block');
 
-      $('.class-2-box').show();
+      if(inputIndex === 1) { 
+        $('.welcome').hide();
+        $('.class-2-box').show();
+      }
       if(inputIndex === 2) $('.class-3-box').show();
     });
 
