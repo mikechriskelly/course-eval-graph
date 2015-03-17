@@ -2,19 +2,25 @@ body {
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font: 12px sans-serif;
 }
-h3 {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  font-weight: 200;
-  margin: 10px 0 15px 0;
+h1 {
+  font-family: 'Lato',Helvetica,Arial,sans-serif;
+  margin: 15px 0;
+  display: inline-block;
+  color: #735F59;
 }
-h4 {
-  margin-bottom: 0px;
-  padding-bottom: 0px;
+
+.glyphicon-sort-by-attributes-alt {
+  color: #fff;
+  font-size: 20px;
+  top: 6px;
+  left: 6px;
+  cursor: pointer;
 }
 
 .header {
   margin: 0 auto;
-  background-color: #efefef;
+  background-color: #F4EAD5;
+  border-top: 4px solid #BFB7A7;
 }
 .btn {
   margin: 0px;
@@ -80,14 +86,6 @@ svg {
   font-weight: 200;
 }
 
-select.form-control, input.typeahead {
-  color: #333;
-  border-radius: 8px;
-}
-
-.twitter-typeahead {
-  width: 90%;
-}
 .class-container {
   max-width: 700px;
   margin: 0 auto;
@@ -98,9 +96,14 @@ select.form-control, input.typeahead {
   margin: 0 auto;
 }
 
-.class-1-box input, .class-1-box input:focus { 	border: 12px solid #e41a1c; }
-.class-2-box input, .class-2-box input:focus { 	border: 12px solid #377eb8; }
-.class-3-box input, .class-3-box input:focus {	border: 12px solid #4daf4a; }
+.class-1-box input, .class-1-box input:focus {  border: 1px solid #fff; }
+.class-2-box input, .class-2-box input:focus {  border: 1px solid #fff; }
+.class-3-box input, .class-3-box input:focus {  border: 1px solid #fff; }
+
+.class-1-box {  padding: 8px; border-radius: 4px; background-color: #e41a1c; }
+.class-2-box {  padding: 8px; border-radius: 4px; background-color: #377eb8; }
+.class-3-box {  padding: 8px; border-radius: 4px; background-color: #4daf4a; }
+
 
 .class-1 path {  stroke: #e41a1c; fill: none; }
 .class-2 path {  stroke: #377eb8; fill: none; }
@@ -111,12 +114,22 @@ select.form-control, input.typeahead {
 .class-3 circle {  fill: #4daf4a; }
 
 
-.typeahead, .close-icon {
+select.form-control, input.typeahead {
+  color: #333;
+  border-radius: 8px;
+}
+
+.twitter-typeahead {
+  width: 90%;
+}
+
+.typeahead {
   position: relative;
   padding: 10px;
 }
 
 .close-icon {
+  position: absolute;
   border:1px solid transparent;
   background-color: transparent;
   display: none;
@@ -132,8 +145,8 @@ select.form-control, input.typeahead {
   position: absolute;
   background-color: #b7b7b7;
   z-index:1;
-  right: 42px;
-  top: 0;
+  right: 24px;
+  top: 27px;
   bottom: 2px;
   margin: auto;
   padding: 2px;

@@ -6,6 +6,7 @@
    
     <!-- Bootstrap Styling -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
     <!-- Custom Styling -->
     <link rel="stylesheet" href="css/main.css">
@@ -19,47 +20,40 @@
     <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
   </head>
   <body>
+    <div class="container">
+      <h1>UW Course Evaluation Graph</h1>
+    </div>
     <div class="container-fluid header">
       <div class="container">
         <div class="row space">
-          <div class="col-md-3">
-            <h3>UW Course Comparison</h3>
-          </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="class-1-box">
             <form>
               <input required class="typeahead form-control class-1" type="search" placeholder="Enter Course 1">
               <button class="close-icon class-1" type="reset"></button>
+              <span class="glyphicon glyphicon-sort-by-attributes-alt btn-1" aria-hidden="true" title="Sort by this class"></span>
             </form>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="class-2-box">
               <form>
                 <input required class="typeahead form-control class-2" type="search" placeholder="Enter Course 2">
                 <button class="close-icon class-2" type="reset"></button>
+                <span class="glyphicon glyphicon-sort-by-attributes-alt btn-2" aria-hidden="true" title="Sort by this class"></span>
               </form>
             </div>
           </div>
-          <div class="col-md-3">
+          <div class="col-md-4">
             <div class="class-3-box">
               <form>
                 <input required class="typeahead form-control class-3" type="search" placeholder="Enter Course 3">
                 <button class="close-icon class-3" type="reset"></button>
+                <span class="glyphicon glyphicon-sort-by-attributes-alt btn-3" aria-hidden="true" title="Sort by this class"></span>
               </form>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="container space">
-      <h4>Course Evaluations</h4>
-      <label>Sort Features by</label>
-      <div class="btn-group" role="group" aria-label="...">
-        <button type="button" class="btn btn-default btn-0">Survey</button>
-        <button type="button" class="btn btn-default btn-1">Class 1</button>
-        <button type="button" class="btn btn-default btn-2">Class 2</button>
-        <button type="button" class="btn btn-default btn-3">Class 3</button>
       </div>
     </div>
     <div class="container graph">
@@ -105,6 +99,9 @@ var tooltip = d3.select('body')
   .style('position', 'absolute')
   .style('z-index', '10')
   .style('visibility', 'hidden');
+
+// Track on which class features are sorted
+var sortedBy = 0;
 
 // Load the data files
 queue()
@@ -197,6 +194,11 @@ function ready(error, courses, eval_questions) {
         .attr('cy', 0)
         .attr('r', 0);
 
+      // Remove sorting. 
+      if(sortedBy === inputIndex) {
+        change(undefined, features);
+        sortedBy = 0;
+      }
     });
 
   // Insert the yAxis
@@ -256,7 +258,8 @@ function ready(error, courses, eval_questions) {
 
   // Click events for sort buttons
   d3.select('.btn-0')
-    .on('click', function(_) { 
+    .on('click', function(_) {
+      sortedBy = 0; 
       change(undefined, features); 
     });
   d3.select('.btn-1')
@@ -264,21 +267,30 @@ function ready(error, courses, eval_questions) {
       var course = d3.select('g.class-1 path').data()[0];
       var hasCourse = typeof course === 'object';
       var hasInput = d3.select('button.class-1').style('display') != 'none';
-      if (hasCourse && hasInput) change(course, features); 
+      if (hasCourse && hasInput && (sortedBy != 1)) { 
+        change(course, features);
+        sortedBy = 1;
+      } 
     });
   d3.select('.btn-2')
     .on('click', function(_) { 
       var course = d3.select('g.class-2 path').data()[0];
       var hasCourse = typeof course === 'object';
-      var hasInput = d3.select('button.class-3').style('display') != 'none';
-      if (hasCourse && hasInput) change(course, features); 
+      var hasInput = d3.select('button.class-2').style('display') != 'none';
+      if (hasCourse && hasInput && (sortedBy != 2)) {
+        change(course, features);
+        sortedBy = 2;
+      } 
     });
   d3.select('.btn-3')
     .on('click', function(_) { 
       var course = d3.select('g.class-3 path').data()[0];
       var hasCourse = typeof course === 'object';
       var hasInput = d3.select('button.class-3').style('display') != 'none';
-      if (hasCourse && hasInput) change(course, features); 
+      if (hasCourse && hasInput && (sortedBy != 3)) {
+        change(course, features);
+        sortedBy = 3;
+      } 
     });
 }
 
