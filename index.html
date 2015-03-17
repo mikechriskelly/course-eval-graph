@@ -4,14 +4,12 @@
     <meta charset="UTF-8">
     <title>Coursector: Course Evaluation Graph</title>
    
-    <!-- Bootstrap Styling -->
+    <!-- Styling -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-    <!-- Custom Styling -->
     <link rel="stylesheet" href="css/main.css">
     <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
-    <!-- Load JavaScript libraries -->
+    <!-- JavaScript libraries -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -133,7 +131,8 @@ function ready(error, courses, eval_questions) {
   // Add a text description field to the courses objects. Used for typeahead text.
   var coursesDescriptions = [];
   for(var i in courses) {
-    coursesDescriptions.push(courses[i].crsabbr.replace(/\s+/g, '') + courses[i].crsno + ' ' + courses[i].lname);
+    coursesDescriptions.push(courses[i].crsabbr.replace(/\s+/g, '') + 
+      courses[i].crsno + ' ' + courses[i].lname);
   }
 
   // Typeahead Form settings
@@ -178,6 +177,7 @@ function ready(error, courses, eval_questions) {
       var closeIcon = '.class-' + inputIndex + '-box .close-icon';
       $(closeIcon).css('display','inline-block');
 
+      // Progressively reveal more input boxes as they are used
       if(inputIndex === 1) { 
         $('.welcome').hide();
         $('.class-2-box').show();
@@ -206,8 +206,7 @@ function ready(error, courses, eval_questions) {
         .attr('cy', 0)
         .attr('r', 0);
 
-      console.log(sortedBy === inputIndex);
-      // Remove sorting. 
+      // If sorted on this class, return to default sorting
       if(sortedBy == inputIndex) {
         change(undefined, features);
         sortedBy = 0;
@@ -286,8 +285,8 @@ function ready(error, courses, eval_questions) {
   // Click events for sort buttons
   d3.select('.btn-0')
     .on('click', function(_) {
-      sortedBy = 0; 
       change(undefined, features); 
+      sortedBy = 0; 
     });
   d3.select('.btn-1')
     .on('click', function(_) { 
@@ -375,14 +374,12 @@ function change(course, features) {
       q = d3.select(this).attr('class');
       return x(q) || 0; 
     });
-
   transition.selectAll('.class-2 circle')
     .delay(delay)
     .attr('cx', function (d) { 
       q = d3.select(this).attr('class');
       return x(q) || 0; 
     });
-
   transition.selectAll('.class-3 circle')
     .delay(delay)
     .attr('cx', function (d) { 
@@ -406,9 +403,6 @@ function change(course, features) {
     .transition()
     .delay(1700)
     .attr('opacity', 1);
-  
-  //svg.selectAll('.class-2 path').attr('d', '');
-  //svg.selectAll('.class-3 path').attr('d', '');
 
   transition.selectAll('.dimension')
     .delay(delay)
@@ -424,14 +418,13 @@ function path(d) {
     // is always straight no matter the feature sortin
     .sort(function(a, b) { return a[0] - b[0]; }));
 }
+
 // Returns an array of coordinates for plotting points 
 function points(d) {
   return dimensions.map(function(p) { return [x(p), y[p](d[p])]; });
 }
 
 // Typeahead string matching functionality
-// Takes object array of courses
-// returns object array of match
 var substringMatcher = function(strs) {
   return function findMatches(q, cb) {
     var matches, substrRegex;
@@ -453,7 +446,6 @@ var substringMatcher = function(strs) {
         matches.push({ value: str });
       }
     });
- 
     cb(matches);
   };
 };
