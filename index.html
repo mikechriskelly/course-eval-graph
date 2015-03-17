@@ -29,7 +29,7 @@
             <div class="class-1-box">
             <form>
               <input required class="typeahead form-control class-1" type="search" placeholder="Enter Course 1">
-              <button class="close-icon" type="reset"></button>
+              <button class="close-icon class-1" type="reset"></button>
             </form>
             </div>
           </div>
@@ -37,7 +37,7 @@
             <div class="class-2-box">
               <form>
                 <input required class="typeahead form-control class-2" type="search" placeholder="Enter Course 2">
-                <button class="close-icon" type="reset"></button>
+                <button class="close-icon class-2" type="reset"></button>
               </form>
             </div>
           </div>
@@ -45,7 +45,7 @@
             <div class="class-3-box">
               <form>
                 <input required class="typeahead form-control class-3" type="search" placeholder="Enter Course 3">
-                <button class="close-icon" type="reset"></button>
+                <button class="close-icon class-3" type="reset"></button>
               </form>
             </div>
           </div>
@@ -171,6 +171,32 @@ function ready(error, courses, eval_questions) {
       var classIndex = coursesDescriptions.indexOf(classSelection.value);
       // Update that particular line
       updateLine(courses, classIndex, inputIndex);
+      // Make the x visibile to clear results
+      var closeIcon = '.class-' + inputIndex + '-box .close-icon';
+      $(closeIcon).show();
+    });
+
+  // Clear search x button
+  $('.close-icon').button().click(function(){
+      // Figure out which input was clicked
+      var inputIndex = $(this).attr('class').match(/\d/)[0];
+      var closeIcon = '.class-' + inputIndex + '-box .close-icon';
+      $(closeIcon).hide();
+
+      // Select the line group for that input
+      var lineGroup = svg.selectAll('g.class-' + inputIndex);
+
+      // Hide the path
+      lineGroup.selectAll('path')
+        .attr('d', '')
+        .style("stroke-opacity", 0);
+
+      // Hide the circles
+      lineGroup.selectAll('circle')
+        .attr('cx', 0)
+        .attr('cy', 0)
+        .attr('r', 0);
+
     });
 
   // Insert the yAxis
@@ -236,18 +262,23 @@ function ready(error, courses, eval_questions) {
   d3.select('.btn-1')
     .on('click', function(_) { 
       var course = d3.select('g.class-1 path').data()[0];
-      console.log(course);
-      if (typeof course === 'object') change(course, features); 
+      var hasCourse = typeof course === 'object';
+      var hasInput = d3.select('button.class-1').style('display') != 'none';
+      if (hasCourse && hasInput) change(course, features); 
     });
   d3.select('.btn-2')
     .on('click', function(_) { 
       var course = d3.select('g.class-2 path').data()[0];
-      if (typeof course === 'object') change(course, features); 
+      var hasCourse = typeof course === 'object';
+      var hasInput = d3.select('button.class-3').style('display') != 'none';
+      if (hasCourse && hasInput) change(course, features); 
     });
   d3.select('.btn-3')
     .on('click', function(_) { 
       var course = d3.select('g.class-3 path').data()[0];
-      if (typeof course === 'object') change(course, features); 
+      var hasCourse = typeof course === 'object';
+      var hasInput = d3.select('button.class-3').style('display') != 'none';
+      if (hasCourse && hasInput) change(course, features); 
     });
 }
 
@@ -292,9 +323,6 @@ function updateLine(courses, classIndex, inputIndex) {
 function change(course, features) {
   x.domain((typeof course === 'object') ?
     features.slice(0).sort(function(a, b) { return course[b] - course[a]; }) : dimensions = features);
-
-  console.log(course);
-  console.log(features);
 
   var transition = svg.transition().duration(750);
   var delay = function(d, i) { return i * 50; };
