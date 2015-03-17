@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Course Comparison Tool</title>
+    <title>Coursector: Class Evaluation Graph</title>
    
     <!-- Bootstrap Styling -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
     <!-- Custom Styling -->
     <link rel="stylesheet" href="css/main.css">
+    <link href='http://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
 
     <!-- Load JavaScript libraries -->
     <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -17,11 +17,10 @@
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
-    <script src="https://jquery-csv.googlecode.com/files/jquery.csv-0.71.js"></script>
   </head>
   <body>
     <div class="container">
-      <h1>UW Course Evaluation Graph</h1>
+      <h1>Coursector</h1><h4>Class Evaluation Graph</h4>
     </div>
     <div class="container-fluid header">
       <div class="container">
@@ -29,7 +28,7 @@
           <div class="col-md-4">
             <div class="class-1-box">
             <form>
-              <input required class="typeahead form-control class-1" type="search" placeholder="Enter Course 1">
+              <input required class="typeahead form-control class-1" type="search" placeholder="Enter a class">
               <button class="close-icon class-1" type="reset"></button>
               <span class="glyphicon glyphicon-sort-by-attributes-alt btn-1" aria-hidden="true" title="Sort by this class"></span>
             </form>
@@ -38,7 +37,7 @@
           <div class="col-md-4">
             <div class="class-2-box">
               <form>
-                <input required class="typeahead form-control class-2" type="search" placeholder="Enter Course 2">
+                <input required class="typeahead form-control class-2" type="search" placeholder="Enter another class">
                 <button class="close-icon class-2" type="reset"></button>
                 <span class="glyphicon glyphicon-sort-by-attributes-alt btn-2" aria-hidden="true" title="Sort by this class"></span>
               </form>
@@ -47,7 +46,7 @@
           <div class="col-md-4">
             <div class="class-3-box">
               <form>
-                <input required class="typeahead form-control class-3" type="search" placeholder="Enter Course 3">
+                <input required class="typeahead form-control class-3" type="search" placeholder="Enter another class">
                 <button class="close-icon class-3" type="reset"></button>
                 <span class="glyphicon glyphicon-sort-by-attributes-alt btn-3" aria-hidden="true" title="Sort by this class"></span>
               </form>
@@ -95,7 +94,8 @@ var yAxis = d3.svg.axis()
  
 // Hover tooltip to show class name
 var tooltip = d3.select('body')
-  .append('div')
+  .append('span')
+  .attr('class', 'hovertip')
   .style('position', 'absolute')
   .style('z-index', '10')
   .style('visibility', 'hidden');
@@ -130,7 +130,7 @@ function ready(error, courses, eval_questions) {
   // Add a text description field to the courses objects. Used for typeahead text.
   var coursesDescriptions = [];
   for(var i in courses) {
-    coursesDescriptions.push(courses[i].crsabbr + ' ' + courses[i].crsno + ' ' + courses[i].lname);
+    coursesDescriptions.push(courses[i].crsabbr.replace(/\s+/g, '') + courses[i].crsno + ' ' + courses[i].lname);
   }
 
   // Typeahead Form settings
@@ -160,6 +160,9 @@ function ready(error, courses, eval_questions) {
       source: substringMatcher(coursesDescriptions)
     });
 
+  // Display only the first typeahead box  initially
+  $('.class-1-box').show();
+
   // Typeahead event behavior; same for all 3
   $('input').on('typeahead:selected typeahead:autocompleted',
     // When the form is selected we get the text and which form it came from
@@ -170,7 +173,10 @@ function ready(error, courses, eval_questions) {
       updateLine(courses, classIndex, inputIndex);
       // Make the x visibile to clear results
       var closeIcon = '.class-' + inputIndex + '-box .close-icon';
-      $(closeIcon).show();
+      $(closeIcon).css('display','inline-block');
+
+      $('.class-2-box').show();
+      if(inputIndex === 2) $('.class-3-box').show();
     });
 
   // Clear search x button
@@ -229,11 +235,25 @@ function ready(error, courses, eval_questions) {
       .attr('class','labels')
       .attr('x', 10)
       .attr('y', -10)
+      .attr('cursor', 'default')
       .attr('transform', function(d) {
          return 'rotate(-45)'; 
       })
       .text(function(d, i) {
         return eval_questions[i].tag; 
+      })
+    .on('mouseover', function(d, i){
+      return tooltip
+        .style('visibility', 'visible')
+        .text(eval_questions[i].desc);
+      })
+    .on('mousemove', function(){
+      return tooltip
+        .style('top', (event.pageY-10)+'px').style('left',(event.pageX+10)+'px');
+      })
+    .on('mouseout', function(){
+      return tooltip
+        .style('visibility', 'hidden');
       });
 
   // Format axis labels for likert ratings
@@ -305,20 +325,7 @@ function updateLine(courses, classIndex, inputIndex) {
     .data([newClass])
     .attr('d', path)
     .attr('stroke', function(d, i) { return colors[i]; })
-    .style("stroke-opacity", 0.3)
-    .on('mouseover', function(d){
-      return tooltip
-        .style('visibility', 'visible')
-        .text(d.crsabbr + ' ' + d.crsno + ' ' + d.lname);
-      })
-    .on('mousemove', function(){
-      return tooltip
-        .style('top', (event.pageY-10)+'px').style('left',(event.pageX+10)+'px');
-      })
-    .on('mouseout', function(){
-      return tooltip
-        .style('visibility', 'hidden');
-      });
+    .style("stroke-opacity", 0.3);
 
   // Update the circles
   var circleCoords = points(newClass);
@@ -328,7 +335,21 @@ function updateLine(courses, classIndex, inputIndex) {
     .attr('fill', function(_, i) { return colors[i]; })
     .attr('cx', function (d) { return d[0]; })
     .attr('cy', function (d) { return d[1]; })
-    .attr('r', 5);
+    .attr('r', 5)
+    .on('mouseover', function(d, i){
+      var rating = Number(newClass['q' + i]).toFixed(1);
+      return tooltip
+        .style('visibility', 'visible')
+        .text(rating.toString() + ' out of 5');
+      })
+    .on('mousemove', function(){
+      return tooltip
+        .style('top', (event.pageY-10)+'px').style('left',(event.pageX+10)+'px');
+      })
+    .on('mouseout', function(){
+      return tooltip
+        .style('visibility', 'hidden');
+      });
 }
 
 // Sort the feature columns by value
