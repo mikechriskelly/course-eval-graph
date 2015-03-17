@@ -206,8 +206,9 @@ function ready(error, courses, eval_questions) {
         .attr('cy', 0)
         .attr('r', 0);
 
+      console.log(sortedBy === inputIndex);
       // Remove sorting. 
-      if(sortedBy === inputIndex) {
+      if(sortedBy == inputIndex) {
         change(undefined, features);
         sortedBy = 0;
       }
