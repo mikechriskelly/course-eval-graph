@@ -438,7 +438,7 @@ var substringMatcher = function(strs) {
     // regex used to determine if a string contains the substring `q`
     // If query is only one character then limit results to start of string
     // This helps avoid noisy results
-    substrRegex = (q.length === 1) ? new RegExp('^' + q, 'i') : new RegExp(q, 'i');
+    substrRegex = (q.length < 5) ? new RegExp('^' + q, 'i') : new RegExp(q, 'i');
  
     // iterate through the pool of strings and for any string that
     // contains the substring `q`, add it to the `matches` array
