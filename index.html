@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Coursector: Course Evaluation Graph</title>
+    <title>Course Ratings Graph</title>
    
     <!-- Styling -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
@@ -18,7 +18,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Coursector</h1><h4>UW Course Evaluation Graph</h4>
+      <h1>Course Ratings Graph</h1>
     </div>
     <div class="container-fluid header">
       <div class="container">
@@ -34,7 +34,7 @@
           </div>
           <div class="col-md-4">
             <div class="welcome">
-              <h4>Class ratings by professor. Compare up to 3 classes.</h4>
+              <h4>Visualize course evaluation data. Compare up to 3 classes by professor.</h4>
             </div>
             <div class="class-2-box">
               <form>
@@ -57,6 +57,9 @@
       </div>
     </div>
     <div class="container graph">
+    </div>
+    <div class="container footnote">
+      <p>This demo does not use actual professors or class data.</p> 
     </div>
   </body>
   <script>
@@ -363,7 +366,7 @@ function change(course, features) {
   x.domain((typeof course === 'object') ?
     features.slice(0).sort(function(a, b) { return course[b] - course[a]; }) : dimensions = features);
 
-  var transition = svg.transition().duration(750);
+  var transition = svg.transition().duration(500);
   var delay = function(d, i) { return i * 50; };
 
   // Seperate transition for each group of circles
