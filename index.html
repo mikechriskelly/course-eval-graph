@@ -106,7 +106,7 @@ var sortedBy = 0;
 
 // Load the data files
 queue()
-  .defer(d3.csv, 'data/all_courses_A.csv')
+  .defer(d3.csv, 'data/courses_dummydata.csv')
   .defer(d3.json, 'data/eval_questions.json')
   .await(ready);
 
