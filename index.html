@@ -14,7 +14,7 @@
     <script src="http://d3js.org/queue.v1.min.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script src="http://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.min.js"></script>
+    <script src="typeahead.js"></script>
   </head>
   <body>
     <div class="container">
@@ -116,17 +116,14 @@ queue()
 // Main sequence
 function ready(error, courses, eval_questions) {
   // Extract the list of dimensions and create a scale for each.
-  var features = d3.keys(courses[0]).filter(function(d) {
-    // Exclude these features from the graph
-    nonfeatures = ['crsabbr','crsno','fname','lname','formtype', 
-                   'q23','q24','q25','q26','q27','q28','q29','q30','q31','q32'];
-    return nonfeatures.indexOf(d) < 0 && 
-      (y[d] = d3.scale.linear()
+  var features = ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12", "q13", "q14", "q15", "q16", "q17", "q18", "q19", "q20", "q21", "q22"];
+  for(var i in features) {
+      (y[features[i]] = d3.scale.linear()
         .domain([0,5])
         .range([height, 0]));
-  });
+  };
 
-  x.domain(dimensions = features);
+  x.domain(features);
 
   // console.log(courses);
   // console.log(eval_questions);
